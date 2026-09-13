@@ -28,6 +28,8 @@ Built with **LangChain**, **ChromaDB**, **HuggingFace embeddings**, **Groq LLM**
 6. **Generate** — the retrieved context and your question are passed into a strict, context-only prompt (`rag/prompt.py`) and sent to the Groq LLM (`rag/chain.py`).
 7. **Answer** — the response is streamed back to you in the chat interface.
 
+> A visual breakdown of both phases (document ingestion into the vector DB, and question answering) is available in [`workflow_doc/RAG_Workflow.pptx`](workflow_doc/RAG_Workflow.pptx).
+
 ---
 
 ## 📸 Screenshots
@@ -71,6 +73,8 @@ Ai-Documents-Chatbot-Langchain/
 │   └── test_llm.py            # Tests for LLM connectivity
 ├── data/uploads/               # Sample files for testing
 ├── Assets/                     # Screenshots used in this README
+├── workflow_doc/
+│   └── RAG_Workflow.pptx       # Diagram: ingestion (Phase 1) and Q&A (Phase 2) flow
 ├── chroma_db/                  # Persisted vector store (auto-generated, gitignored)
 ├── requirements.txt
 ├── .gitignore
