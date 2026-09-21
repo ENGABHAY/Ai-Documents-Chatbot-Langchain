@@ -6,6 +6,22 @@ Built with **LangChain**, **ChromaDB**, **HuggingFace embeddings**, **Groq LLM**
 
 ---
 
+## 🎯 Problem Domain
+
+**Use case: answering questions from your own documents.**
+
+Students, researchers and professionals spend a lot of time hunting through long documents (research papers, reports, notes, spreadsheets) for one specific fact. Keyword search misses paraphrased wording, and asking a general-purpose LLM directly is risky because it doesn't have the document and may answer from memory, or make something up.
+
+This chatbot uses Retrieval-Augmented Generation (RAG) to fix both problems. It retrieves the relevant passages from the uploaded file and tells the LLM to answer only from them, or to say it couldn't find the answer.
+
+| | |
+|---|---|
+| **Who it helps** | Anyone who needs quick, checkable answers from a private or domain-specific document without reading it end to end |
+| **Demo document** | *Attention Is All You Need* (the Transformer paper), a dense technical paper with exact facts (model sizes, scores) that are easy to verify |
+| **Scope** | One document at a time: PDF, TXT, DOCX, CSV, XLSX/XLS, PPTX, HTML |
+
+---
+
 ## ✨ Features
 
 - 📁 **Multi-format document support** — PDF, TXT, DOCX, CSV, XLSX/XLS, PPTX, HTML
@@ -97,6 +113,23 @@ Ai-Documents-Chatbot-Langchain/
 | Document Parsing       | PyPDF, python-docx, openpyxl, pandas, unstructured |
 | UI                     | Streamlit                                          |
 | Notebook               | Jupyter (VS Code / Colab)                          |
+
+---
+
+## 🧩 Design Choices
+
+| Component | Choice | Why |
+|---|---|---|
+| Orchestration | LangChain | Chains the steps as `retriever → prompt → LLM → parser`, so each part can be swapped independently |
+| Loaders | One loader per file type, chosen by extension; Excel read one sheet per document | Users bring documents in many formats |
+| Chunking | `RecursiveCharacterTextSplitter`, 1000 characters with 150 overlap | Keeps paragraphs and sentences together, and the overlap stops answers being cut at chunk boundaries (on the sample paper: 40 chunks, 894 characters on average) |
+| Embeddings | `all-MiniLM-L6-v2`, run locally | Small (~90 MB), no API cost, good enough for semantic search on short passages |
+| Vector store | ChromaDB, persisted to disk | Runs locally with no server to set up |
+| Retrieval | MMR, `k=5`, `fetch_k=20` | Returns relevant and varied chunks instead of five near-duplicates. The trade-off: some weaker chunks slip in (see section 8.4 of the notebook) |
+| Prompt | Context-only, with a fixed refusal sentence | Reduces hallucination and makes "not found" easy to detect (see the FIFA question in section 8.5 of the notebook) |
+| LLM | Groq `openai/gpt-oss-20b`, temperature 0 | Hosted inference, so no local GPU is needed. Temperature 0 gives consistent, factual answers |
+| Interface | Streamlit (`app.py`) | Fastest route to a chat UI; the retriever is kept in `session_state`, so a file is processed once per upload |
+| Delivery | Notebook plus this repo | The notebook is the runnable end-to-end version; the repo holds the full Streamlit app |
 
 ---
 
