@@ -93,6 +93,13 @@ Ai-Documents-Chatbot-Langchain/
 ├── Assets/                     # Screenshots used in this README
 ├── workflow_docs/
 │   └── RAG_Workflow.pptx       # Diagram: ingestion (Phase 1) and Q&A (Phase 2) flow
+├── docs/
+│   ├── prd.md                  # Product requirements: problem, users, scope, roadmap
+│   ├── architecture.md         # System design, modules, data flow, known gaps
+│   ├── design.md               # UI states, copy, prompt design, UX fixes
+│   ├── rules.md                # Project rules and coding conventions
+│   ├── tasks.md                # Done, bugs and backlog
+│   └── memory.md               # Project context, decisions and gotchas
 ├── chroma_db/                  # Persisted vector store (auto-generated, gitignored)
 ├── .env                        # Your GROQ_API_KEY (gitignored, create it yourself)
 ├── requirements.txt
